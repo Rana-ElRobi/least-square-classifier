@@ -81,7 +81,7 @@ for (i in (1:7)){
 }
 #----------------------
 parTrans.Mult.target = x.parTranspose %*% target.vector
-w.par = x.par.Mult.invers %*% parTrans.Mult.target # Equation done for classifier a
+w.par = x.par.Mult.invers %*% parTrans.Mult.target # Equation done for classifier character (a)
 # ----------------------------------
 
 
