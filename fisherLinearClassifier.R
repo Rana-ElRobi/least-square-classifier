@@ -30,10 +30,9 @@ for (c in (1:26)){  # Loop on each character
 # helper link:
 # https://www.rdocumentation.org/packages/readbitmap/versions/0.1-4/topics/read.bitmap
 #-------------------------------------------------------
-images.list = rep(list(list()), 128)  # List of 128 image sorted for all charachters each have 7 
+images.list = rep(list(list()), 182)  # List of 182 image sorted for all charachters each have 7 
 img.count = 1
-#imgpath = '/home/rana/Desktop/fisher-linear-classiffier/Train/A1a1.jpg'
-for (curr in (1:128)){  # Loop on the paths list
+for (curr in (1:182)){  # Loop on the paths list
   curr.img = readJPEG(paths[[curr]], native = FALSE)
   # sort pixels in one list of features
   # Now ---------- lets read all pixels in on list of 144 feature
