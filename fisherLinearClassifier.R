@@ -52,8 +52,41 @@ for (curr in (1:182)){  # Loop on the paths list
   # combin as row to the main data matrix
   images.matrix = rbind(images.matrix,curr_pixels)
 }
-# Delete the 1st row as it was zeros for just initialization
-images.matrix = images.matrix[2:183,1:145]
 #------------------------------------------------------------------------- 
 # =================== Lets Start the Algorithm ===================
+# Equation is :
+# W.par = [ (x.parTranspose * x.par).invers ]*[ x.parTranspose * target.Lables ]
+# Helper link for math methods
+# http://www.statmethods.net/advstats/matrix.html
+#------------------------------------------------------------------------
+# Delete the 1st row as it was zeros for just initialization
+x.par = as.matrix(images.matrix[2:183,1:145])# now we have x.par
+x.parTranspose = t(x.par) # get transpose
+# multiply xpar to transpose xpar
+x.par.Multiply = x.par %*% x.parTranspose ### ERROR ### requires numeric/complex matrix/vector arguments
+# get invers multiplication
+x.par.Mult.invers = ginv(x.par.Multiply)
+# Loop to get current target lable
+#----------------------
+# but now
+# set it for 1st calssiffier
+# vector of 1st 7 rows are 1 else are -1
+class.vector = matrix(1,7,1) # for a class
+target.vector = matrix(-1,182,1) # for ALL classes
+#overwrite only on according to the loop on characters
+# i in the target.vector changes when i write the main loop on the 26 character
+for (i in (1:7)){
+  # overwrite
+  target.vector[i] = class.vector[i] 
+}
+#----------------------
+parTrans.Mult.target = x.parTranspose %*% target.vector
+w.par = x.par.Mult.invers %*% parTrans.Mult.target # Equation done for classifier a
+# ----------------------------------
+
+
+
+
+
+
 
