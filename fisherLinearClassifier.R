@@ -27,28 +27,33 @@ for (c in (1:26)){  # Loop on each character
 }
 # =====================================================
 # ================= Read All images ===================
-# helper link:
+# helper link for reading images data :
 # https://www.rdocumentation.org/packages/readbitmap/versions/0.1-4/topics/read.bitmap
 #-------------------------------------------------------
-images.list = rep(list(list()), 182)  # List of 182 image sorted for all charachters each have 7 
-img.count = 1
+# heper link for matrix initialization:
+# https://www.r-bloggers.com/making-matrices-with-zeros-and-ones/
+#--------------------------------------------------------
+images.matrix = matrix(0, 1, 145) # initialize zeros matrix 1 row 145 column 
+#img.count = 1
 for (curr in (1:182)){  # Loop on the paths list
   curr.img = readJPEG(paths[[curr]], native = FALSE)
   # sort pixels in one list of features
   # Now ---------- lets read all pixels in on list of 144 feature
-  curr_char = list();
+  curr_pixels = list();
   count = 1   # counter of features list
   for (x in 1:12){    # loop on x axis 
     for (y in 1:12){  # loop on y axis
-      curr_char[count] = curr.img[x,y] # append pixel value in list of features
+      curr_pixels[count] = curr.img[x,y] # append pixel value in list of features
       count = count + 1 # incremant index of list
     }
   }
-  images.list[[img.count]] = curr_char
-  img.count = img.count + 1
+  # Append 1 as class lable classifer training
+  curr_pixels[count] = 1
+  # combin as row to the main data matrix
+  images.matrix = rbind(images.matrix,curr_pixels)
 }
-# Access img no 10 , pixel no 1
-#images.list[[10]][1] 
+# Delete the 1st row as it was zeros for just initialization
+images.matrix = images.matrix[2:183,1:145]
 #------------------------------------------------------------------------- 
 # =================== Lets Start the Algorithm ===================
 
