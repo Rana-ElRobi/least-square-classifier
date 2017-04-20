@@ -75,11 +75,11 @@ parTrans.Mult.invers = x.par.Mult.invers %*% x.parTranspose
 dim(parTrans.Mult.invers)
 # Loop to get current target lable
 #----------------------
-# vector of 1st 7 rows are 1 else are -1
-class.vector = matrix(1,7,1) # for a class
-target.vector = matrix(-1,182,1) # for ALL classes
 w.par.matrix = matrix(0,145,1) # big matrix carry in each column the w par of each classifere 
 for (curr.indx in 1:26){   #overwrite only on according to the loop on characters
+  # vector of 1st 7 rows are 1 else are -1
+  class.vector = matrix(1,7,1) # for a class
+  target.vector = matrix(-1,182,1) # for ALL classes
   # start from ([currIndex-1]*7)+1 to currIndex*7 
   start = ((curr.indx-1)*7)
   for (i in (1:7)){
