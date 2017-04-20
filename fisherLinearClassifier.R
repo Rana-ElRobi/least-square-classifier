@@ -71,25 +71,30 @@ dim(x.par.Multiply)
 # get invers multiplication
 x.par.Mult.invers = ginv(x.par.Multiply)
 dim(x.par.Mult.invers)
+parTrans.Mult.invers = x.par.Mult.invers %*% x.parTranspose 
+dim(parTrans.Mult.invers)
 # Loop to get current target lable
 #----------------------
-# but now
-# set it for 1st calssiffier
 # vector of 1st 7 rows are 1 else are -1
 class.vector = matrix(1,7,1) # for a class
 target.vector = matrix(-1,182,1) # for ALL classes
-#overwrite only on according to the loop on characters
-# i in the target.vector changes when i write the main loop on the 26 character
-for (i in (1:7)){
-  # overwrite
-  target.vector[i] = class.vector[i] 
+w.par.matrix = matrix(0,145,1) # big matrix carry in each column the w par of each classifere 
+for (curr.indx in 1:26){   #overwrite only on according to the loop on characters
+  # start from ([currIndex-1]*7)+1 to currIndex*7 
+  start = ((curr.indx-1)*7)
+  for (i in (1:7)){
+    # overwrite
+    target.vector[start+i] = class.vector[i] 
+  }
+  #----------------------
+  w.par = parTrans.Mult.invers %*% target.vector # Equation done for each char classifier 
+  dim(w.par)
+  # append this weights to the main matrix
+  w.par.matrix = cbind(w.par.matrix ,as.double(w.par))
 }
-#----------------------
-parTrans.Mult.invers = x.par.Mult.invers %*% x.parTranspose 
-dim(parTrans.Mult.invers)
-#inversBig.Mult.target = parTrans.Mult.invers %*% target.vector
-w.par = parTrans.Mult.invers %*% target.vector # Equation done for classifier character (a)
-dim(w.par)
+# remove the initial column
+w.par.matrix = w.par.matrix[1:145,2:27]
+dim(w.par.matrix)
 # ----------------------------------
 
 
