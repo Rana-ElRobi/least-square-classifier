@@ -3,6 +3,7 @@
 library(imager)
 library(jpeg)
 library(readbitmap)
+library(MASS)
 # Step 1 :
 #--------- Load training data----------------------
 # each character have 7 images and 144 pixel(feature)
@@ -39,7 +40,7 @@ for (curr in (1:182)){  # Loop on the paths list
   curr.img = readJPEG(paths[[curr]], native = FALSE)
   # sort pixels in one list of features
   # Now ---------- lets read all pixels in on list of 144 feature
-  curr_pixels = list();
+  curr_pixels = list()
   count = 1   # counter of features list
   for (x in 1:12){    # loop on x axis 
     for (y in 1:12){  # loop on y axis
@@ -50,10 +51,55 @@ for (curr in (1:182)){  # Loop on the paths list
   # Append 1 as class lable classifer training
   curr_pixels[count] = 1
   # combin as row to the main data matrix
-  images.matrix = rbind(images.matrix,curr_pixels)
+  images.matrix = rbind(images.matrix,as.double(curr_pixels))
 }
-# Delete the 1st row as it was zeros for just initialization
-images.matrix = images.matrix[2:183,1:145]
 #------------------------------------------------------------------------- 
 # =================== Lets Start the Algorithm ===================
+# Equation is :
+# W.par = [ (x.parTranspose * x.par).invers ]*[ x.parTranspose * target.Lables ]
+# Helper link for math methods
+# http://www.statmethods.net/advstats/matrix.html
+#------------------------------------------------------------------------
+# Delete the 1st row as it was zeros for just initialization
+x.par = as.matrix(images.matrix[2:183,1:145])# now we have x.par
+dim(x.par)
+x.parTranspose = t(x.par) # get transpose
+dim(x.parTranspose)
+# multiply xpar to transpose xpar
+x.par.Multiply = x.parTranspose  %*% x.par 
+dim(x.par.Multiply)
+# get invers multiplication
+x.par.Mult.invers = ginv(x.par.Multiply)
+dim(x.par.Mult.invers)
+parTrans.Mult.invers = x.par.Mult.invers %*% x.parTranspose 
+dim(parTrans.Mult.invers)
+# Loop to get current target lable
+#----------------------
+w.par.matrix = matrix(0,145,1) # big matrix carry in each column the w par of each classifere 
+for (curr.indx in 1:26){   #overwrite only on according to the loop on characters
+  # vector of 1st 7 rows are 1 else are -1
+  class.vector = matrix(1,7,1) # for a class
+  target.vector = matrix(-1,182,1) # for ALL classes
+  # start from ([currIndex-1]*7)+1 to currIndex*7 
+  start = ((curr.indx-1)*7)
+  for (i in (1:7)){
+    # overwrite
+    target.vector[start+i] = class.vector[i] 
+  }
+  #----------------------
+  w.par = parTrans.Mult.invers %*% target.vector # Equation done for each char classifier 
+  dim(w.par)
+  # append this weights to the main matrix
+  w.par.matrix = cbind(w.par.matrix ,as.double(w.par))
+}
+# remove the initial column
+w.par.matrix = w.par.matrix[1:145,2:27]
+dim(w.par.matrix)
+# ----------------------------------
+
+
+
+
+
+
 
