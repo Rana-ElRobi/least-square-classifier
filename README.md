@@ -1,4 +1,4 @@
-# fisher-linear-classiffier
+# Least-square-classiffier
 This repo implements a Fisher’s linear discriminant classifier that can recognize scanned images of the 26 lower-case characters provided in the file “Assignment 1 Dataset.zip”. 
 - The zip file contains two folders
   * “Train” and “Test”.
@@ -30,7 +30,7 @@ I loaded the input data in one matrix called images.matrix
 -  w.par.matrix -> is matrix carry all the params of 26 classifier each in column, dimentions(145 X 26)
 
 ### Training is DONE ###
-# Testing Steps
+
 
 
 
